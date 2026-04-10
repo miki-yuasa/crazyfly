@@ -9,7 +9,6 @@ dependencies = [
     "torch>=2.7.0",
     "torchvision>=0.22.0",
     "isaacsim[all,extscache]>=5.1.0",
-    "isaaclab[isaacsim,all]>=2.3.0",
 ]
 classifiers = [
     "Natural Language :: English",
@@ -27,8 +26,7 @@ packages = ["crazyfly"]
 [tool.uv.sources]
 torch = [{ index = "pytorch-cu128" }]
 torchvision = [{ index = "pytorch-cu128" }]
-isaacsim = [{ index = "isaacsim" }]
-isaaclab = [{ index = "isaacsim" }]
+isaacsim = [{ index = "nvidia-pypi" }]
 
 [[tool.uv.index]]
 name = "pytorch-cu128"
@@ -36,7 +34,7 @@ url = "https://download.pytorch.org/whl/cu128"
 explicit = true
 
 [[tool.uv.index]]
-name = "isaacsim"
+name = "nvidia-pypi"
 url = "https://pypi.nvidia.com"
 explicit = true
 
