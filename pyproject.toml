@@ -1,0 +1,36 @@
+[project]
+name = "crazyfly"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11, <3.12"
+dependencies = [
+    "gymnasium>=1.2.3",
+    "torch>=2.7.0",
+    "torchvision>=0.22.0",
+    "isaacsim[all,extscache]>=5.1.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["crazyfly"]
+
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cu128" }]
+torchvision = [{ index = "pytorch-cu128" }]
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+
+[[tool.uv.index]]
+name = "isaacsim"
+url = "https://pypi.nvidia.com"
+explicit = true
+
+[tool.uv]
+environments = [
+    "sys_platform == 'linux'",
+] # https://docs.astral.sh/uv/concepts/projects/config/#limited-resolution-environments
+override-dependencies = ["pywin32==306; sys_platform == 'win32'"]

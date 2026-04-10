@@ -5,7 +5,7 @@
 
 import gymnasium as gym
 
-from . import agents
+from ......source.crazyfly.crazyfly.tasks.manager_based.crazyfly import agents
 
 ##
 # Register Gym environments.
