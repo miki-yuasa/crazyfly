@@ -5,14 +5,14 @@
 
 from __future__ import annotations
 
-import torch
 from collections.abc import Sequence
-from typing import TYPE_CHECKING
 from dataclasses import MISSING
-
-import omni.log
+from typing import TYPE_CHECKING
 
 import isaaclab.utils.string as string_utils
+import isaacsim
+import omni.log
+import torch
 from isaaclab.assets.articulation import Articulation
 from isaaclab.managers import ActionTerm, ActionTermCfg
 from isaaclab.utils import configclass
@@ -24,9 +24,19 @@ if TYPE_CHECKING:
     from . import actions_cfg
 
 
-
 class Motor:
-    def __init__(self, num_envs, taus, init, max_rate, min_rate, dt, use, device="cpu", dtype=torch.float32):
+    def __init__(
+        self,
+        num_envs,
+        taus,
+        init,
+        max_rate,
+        min_rate,
+        dt,
+        use,
+        device="cpu",
+        dtype=torch.float32,
+    ):
         """
         Initializes the motor model.
 
@@ -49,12 +59,20 @@ class Motor:
         self.device = device
         self.dtype = dtype
 
-        self.omega = torch.tensor(init, device=device).expand(num_envs, -1).clone()  # (num_envs, num_motors)
+        self.omega = (
+            torch.tensor(init, device=device).expand(num_envs, -1).clone()
+        )  # (num_envs, num_motors)
 
         # Convert to tensors and expand for all drones
-        self.tau = torch.tensor(taus, device=device).expand(num_envs, -1)  # (num_envs, num_motors)
-        self.max_rate = torch.tensor(max_rate, device=device).expand(num_envs, -1)  # (num_envs, num_motors)
-        self.min_rate = torch.tensor(min_rate, device=device).expand(num_envs, -1)  # (num_envs, num_motors)
+        self.tau = torch.tensor(taus, device=device).expand(
+            num_envs, -1
+        )  # (num_envs, num_motors)
+        self.max_rate = torch.tensor(max_rate, device=device).expand(
+            num_envs, -1
+        )  # (num_envs, num_motors)
+        self.min_rate = torch.tensor(min_rate, device=device).expand(
+            num_envs, -1
+        )  # (num_envs, num_motors)
 
     def compute(self, omega_ref):
         """
@@ -72,7 +90,9 @@ class Motor:
             return self.omega
 
         # Compute omega rate using first-order motor dynamics
-        omega_rate = (1.0 / self.tau) * (omega_ref - self.omega)  # (num_envs, num_motors)
+        omega_rate = (1.0 / self.tau) * (
+            omega_ref - self.omega
+        )  # (num_envs, num_motors)
         omega_rate = omega_rate.clamp(self.min_rate, self.max_rate)
 
         # Integrate
@@ -83,7 +103,9 @@ class Motor:
         """
         Resets the motor model to initial conditions.
         """
-        self.omega[env_ids] = torch.tensor(self.init, device=self.device, dtype=self.dtype).expand(len(env_ids), -1)
+        self.omega[env_ids] = torch.tensor(
+            self.init, device=self.device, dtype=self.dtype
+        ).expand(len(env_ids), -1)
 
 
 class JointAction(ActionTerm):
@@ -132,7 +154,9 @@ class JointAction(ActionTerm):
             self._joint_ids = slice(None)
 
         # create tensors for raw and processed actions
-        self._raw_actions = torch.zeros(self.num_envs, self.action_dim, device=self.device)
+        self._raw_actions = torch.zeros(
+            self.num_envs, self.action_dim, device=self.device
+        )
         self._processed_actions = torch.zeros_like(self.raw_actions)
 
         self._motor = Motor(
@@ -191,7 +215,7 @@ class JointAction(ActionTerm):
     def process_actions(self, actions: torch.Tensor):
         # store the raw actions
         self._raw_actions[:] = actions
-        # normalize the actions for RL-friendly range 
+        # normalize the actions for RL-friendly range
         clamped = self._raw_actions.clamp_(-1.0, 1.0)
         mapped = (clamped + 1.0) / 2.0
         # compute the motor angular velocities
@@ -200,7 +224,9 @@ class JointAction(ActionTerm):
 
     def apply_actions(self):
         # set joint effort targets
-        self._asset.set_joint_effort_target(self.processed_actions, joint_ids=self._joint_ids)
+        self._asset.set_joint_effort_target(
+            self.processed_actions, joint_ids=self._joint_ids
+        )
 
     def reset(self, env_ids: Sequence[int] | None = None) -> None:
         self._raw_actions[env_ids] = 0.0
@@ -220,7 +246,7 @@ class JointEffortActionCfg(ActionTermCfg):
     """List of joint names or regex expressions that the action will be mapped to."""
     preserve_order: bool = False
     """Whether to preserve the order of the joint names in the action output. Defaults to False."""
-    
+
     # omega_max: float = 5145.0
     omega_max: float = 100.0
     """Maximum angular velocity of the drone motors in rad/s.
@@ -236,4 +262,3 @@ class JointEffortActionCfg(ActionTermCfg):
     """Minimum rate of change of angular velocities for each motor in rad/s^2."""
     use_motor_model: bool = False
     """Flag to determine if motor delay is bypassed."""
-
