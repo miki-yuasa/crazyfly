@@ -2,15 +2,21 @@
 # All rights reserved.
 #
 # SPDX-License-Identifier: BSD-3-Clause
-
 """Script to run an environment with zero action agent."""
 
-"""Launch Isaac Sim Simulator first."""
-
+import gymnasium as gym
+import isaaclab_tasks  # noqa: F401
+import matplotlib.pyplot as plt
+import torch
 from isaaclab.app import AppLauncher
+from isaaclab_tasks.utils import parse_env_cfg
+from tqdm import tqdm
 
-from utils.get_args import get_args, select_device
-
+import crazyfly.tasks  # noqa: F401
+from crazyfly.utils.algorithms import ppo_policy
+from crazyfly.utils.get_args import get_args, select_device
+from crazyfly.utils.setup_logger import setup_logger
+from crazyfly.utils.utils import get_traj_plot
 
 # add argparse arguments
 parser = get_args()
@@ -25,24 +31,6 @@ app_launcher = AppLauncher(args_cli)
 simulation_app = app_launcher.app
 
 """Rest everything follows."""
-
-import gymnasium as gym
-import torch
-
-import isaaclab_tasks  # noqa: F401
-from isaaclab_tasks.utils import parse_env_cfg
-
-import crazyfly.tasks  # noqa: F401
-
-from tqdm import tqdm
-import matplotlib.pyplot as plt
-from utils.setup_logger import setup_logger
-from utils.algorithms import ppo_policy
-
-from utils.utils import get_traj_plot
-
-# Add project root to Python path
-# sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
 def evaluate(env, policy, env_idx=0):
