@@ -8,6 +8,7 @@
         "${workspaceFolder}/.venv/lib/python3.11/site-packages/isaaclab/source/isaaclab_contrib",
         "${workspaceFolder}/.venv/lib/python3.11/site-packages/isaaclab/source/isaaclab_mimic",
         "${workspaceFolder}/.venv/lib/python3.11/site-packages/isaaclab/source/isaaclab_rl",
-        "${workspaceFolder}/.venv/lib/python3.11/site-packages/isaaclab/source/isaaclab_tasks"
+        "${workspaceFolder}/.venv/lib/python3.11/site-packages/isaaclab/source/isaaclab_tasks",
+        "${workspaceFolder}/.venv/lib/python3.11/site-packages/omni/kernel/py"
     ]
 }
