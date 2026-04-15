@@ -14,16 +14,19 @@ dependencies = [
 ]
 classifiers = [
     "Natural Language :: English",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
-    "Isaac Sim :: 4.5.0",
-    "Isaac Sim :: 5.0.0",
 ]
 license = "Apache-2.0"
 
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
 [tool.hatch.build.targets.wheel]
 packages = ["crazyfly"]
-
 
 [tool.uv.sources]
 torch = [{ index = "pytorch-cu128" }]

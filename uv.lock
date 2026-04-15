@@ -388,7 +388,7 @@ wheels = [
 [[package]]
 name = "crazyfly"
 version = "0.1.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "gymnasium", marker = "sys_platform == 'linux'" },
     { name = "isaaclab", extra = ["all", "isaacsim"], marker = "sys_platform == 'linux'" },
