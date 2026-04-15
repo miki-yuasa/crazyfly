@@ -20,7 +20,12 @@ parser.add_argument(
 parser.add_argument(
     "--num_envs", type=int, default=None, help="Number of environments to simulate."
 )
-parser.add_argument("--task", type=str, default=None, help="Name of the task.")
+parser.add_argument(
+    "--task",
+    type=str,
+    default="Isaac-Crazyfly-v0",
+    help="Name of the task (default: Isaac-Crazyfly-v0).",
+)
 # append AppLauncher cli args
 AppLauncher.add_app_launcher_args(parser)
 # parse the arguments
