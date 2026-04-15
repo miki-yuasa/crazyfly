@@ -14,6 +14,14 @@ It allows you to develop in an isolated environment, outside of the core Isaac L
 
 ## Installation
 
+### Recommended Installation
+The recommended way to use this template is by installing the dependency using `uv`.
+```bash
+uv sync
+```
+
+### Optional Installation
+
 - Install Isaac Lab by following the [installation guide](https://isaac-sim.github.io/IsaacLab/main/source/setup/installation/index.html).
   We recommend using the conda or uv installation as it simplifies calling Python scripts from the terminal.
 
