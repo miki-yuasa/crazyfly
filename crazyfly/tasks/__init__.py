@@ -13,6 +13,7 @@ def _ensure_isaaclab_tasks_on_path() -> None:
     """Make bundled ``isaaclab_tasks`` importable in pip-only IsaacLab installs."""
     try:
         import isaaclab_tasks  # noqa: F401
+
         return
     except ModuleNotFoundError:
         pass
